@@ -7,6 +7,7 @@ defmodule Basic.MixProject do
       version: "0.1.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
+      escript: [main_module: Basic.PlayingWithElixir],
       deps: deps()
     ]
   end
@@ -14,8 +15,7 @@ defmodule Basic.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
-      mod: {Basic.Application, []}
+      extra_applications: [:logger]
     ]
   end
 

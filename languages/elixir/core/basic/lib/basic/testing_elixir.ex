@@ -4,8 +4,13 @@ defmodule Basic.PlayingWithElixir do
     IO.puts "Hello #{name}!"
   end
 
+  def greet(name) do
+    IO.puts "Hello #{name}!"
+  end
 
-  def main do
-    hello("Someone")
+
+  def main(args) do
+    greet(args)
+    :ok
   end
 end
