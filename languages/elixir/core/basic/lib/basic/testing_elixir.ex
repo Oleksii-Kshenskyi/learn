@@ -41,9 +41,7 @@ defmodule Basic.PlayingWithElixir do
   end
 
   def construct_nth_sum_list(string_list) do
-    (for {_number, counter} <- string_list
-                               |> Enum.with_index, do: string_list
-                                                       |> sum_up_to_nth_element(counter))
+    for {_number, counter} <- string_list |> Enum.with_index, do: string_list |> sum_up_to_nth_element(counter)
   end
 
   def sum_of_nth_sums_of_list(string_list) do
