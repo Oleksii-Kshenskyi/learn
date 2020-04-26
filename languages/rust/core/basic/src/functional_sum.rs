@@ -8,15 +8,15 @@ fn sum_of_nth_sums(original_vec: &Vec<i64>) -> i64
         sums.push(nth_sum_of_vec(original_vec, index + 1));
     }
     sums.iter().sum()*/
-    original_vec.iter().enumerate().map(|(index, _element)| {nth_sum_of_vec(original_vec, index + 1)}).sum()
+    original_vec.iter().enumerate().map(|(index, _element)| {original_vec[..index + 1].iter().sum::<i64>() }).sum()
 }
 
-fn nth_sum_of_vec(vec: &Vec<i64>, n: usize) -> i64
+/*fn nth_sum_of_vec(vec: &Vec<i64>, n: usize) -> i64
 {
     // println!("Here is your vec: {:?}", vec);
-    /*let the_sum: i64 = */ vec[..n].iter().sum() 
+    /*let the_sum: i64 = */ // vec[..n].iter().sum() 
     // the_sum
-}
+}*/
 
 fn main() {
     // let a: [u32; 2] = [3, 4];
