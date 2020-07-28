@@ -1,5 +1,9 @@
 extern crate clap;
+mod caesar;
 use clap::{Arg, App};
+use caesar::*;
+
+
 
 fn main() {
     let matches = App::new("Smol Caesar Cipher App")
@@ -21,11 +25,15 @@ fn main() {
                             .conflicts_with("use-file")
                             .help("If specified, encryption and decryption are performed on the value of this argument.")
                     ).get_matches();
+                    
     if matches.is_present("use-file") {
-        println!("KEKW FILE");
+        println!("FILE KEKW");
+        encrypt(matches.value_of("use-file").unwrap());
+        decrypt(matches.value_of("use-file").unwrap());
     }
     if matches.is_present("use-command-line") {
-        println!("KEKW COMMAND LINE");
+        println!("CLI KEKW");
+        encrypt(matches.value_of("use-command-line").unwrap());
+        decrypt(matches.value_of("use-command-line").unwrap());
     }
-                            
 }
