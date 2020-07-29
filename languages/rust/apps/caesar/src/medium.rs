@@ -36,16 +36,16 @@ impl Medium {
    }
 
    fn serve_whoops(&self) -> String {
-      return String::from("ERROR: Something went horribly wrong...");
+      panic!("ERROR: Something went horribly wrong...");
    }
 
    fn serve_file(&self) -> String {
       let content = std::path::Path::new(self.medium_content.as_str());
       if content.exists() && content.is_file() {
-         return String::from("ALL GREEN!");
+         return std::fs::read_to_string(content).unwrap();
       }
       else {
-         return String::from("ERROR: This path is Pepega!");
+         panic!("ERROR: This path is Pepega!");
       }
    }
 }

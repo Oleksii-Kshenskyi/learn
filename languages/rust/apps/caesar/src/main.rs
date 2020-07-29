@@ -60,5 +60,4 @@ fn main() {
     if matches.is_present("decrypt") {
         decrypt(matches.value_of(medium_type).unwrap());
     }
-
 }
