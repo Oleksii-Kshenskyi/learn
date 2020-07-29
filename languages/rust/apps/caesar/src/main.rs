@@ -1,9 +1,9 @@
 extern crate clap;
 use clap::{Arg, ArgGroup, App};
 
-mod caesar;
+mod crypto;
 mod medium;
-use caesar::*;
+use crypto::*;
 use medium::*;
 
 fn main() {
@@ -48,16 +48,15 @@ fn main() {
     if matches.is_present("use-file") {
         medium_type = "use-file";
     }
-    if matches.is_present("use-command-line") {
+    else if matches.is_present("use-command-line") {
         medium_type = "use-command-line";
     }
     let medium = Medium::new(medium_type, matches.value_of(medium_type).unwrap());
-    println!("Medium's content: {:?}", medium.serve_content());
 
     if matches.is_present("encrypt") {
-        encrypt(matches.value_of(medium_type).unwrap());
+        encrypt(medium);
     }
-    if matches.is_present("decrypt") {
-        decrypt(matches.value_of(medium_type).unwrap());
+    else if matches.is_present("decrypt") {
+        decrypt(medium);
     }
 }

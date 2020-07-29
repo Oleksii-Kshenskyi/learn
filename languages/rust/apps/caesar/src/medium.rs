@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 
 pub enum MediumType {
    File,
@@ -30,6 +30,14 @@ impl Medium {
       }
    }
 
+   pub fn dump_result(&self, result: String) {
+      match self.medium_type {
+         MediumType::Whoops => self.dump_into_whoops(),
+         MediumType::File => self.dump_into_file(result),
+         MediumType::CLIArg => self.dump_into_stdout(result),
+      }
+   }
+
 
    fn serve_cli_argument(&self) -> String {
       return self.medium_content.clone();
@@ -47,5 +55,19 @@ impl Medium {
       else {
          panic!("ERROR: This path is Pepega!");
       }
+   }
+
+   fn dump_into_whoops(&self) {
+      panic!("ERROR: This should have never happened...");
+   }
+
+   fn dump_into_stdout(&self, result: String) {
+      println!("{}", result);
+   }
+
+   fn dump_into_file(&self, result: String) {
+      let string_path = &format!("{}{}", self.medium_content, ".result");
+      let content_path = std::path::Path::new(string_path);
+      std::fs::write(content_path, result).expect("ERROR: unable to write the results to a file.");
    }
 }
