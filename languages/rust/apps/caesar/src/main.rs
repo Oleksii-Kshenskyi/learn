@@ -2,7 +2,9 @@ extern crate clap;
 use clap::{Arg, ArgGroup, App};
 
 mod caesar;
+mod medium;
 use caesar::*;
+use medium::*;
 
 fn main() {
     let matches = App::new("Smol Caesar Cipher App")
@@ -44,13 +46,13 @@ fn main() {
 
     let mut medium_type = "";
     if matches.is_present("use-file") {
-        println!("FILE KEKW");
         medium_type = "use-file";
     }
     if matches.is_present("use-command-line") {
-        println!("CLI KEKW");
         medium_type = "use-command-line";
     }
+    let medium = Medium::new(medium_type, matches.value_of(medium_type).unwrap());
+    println!("Medium's content: {:?}", medium.serve_content());
 
     if matches.is_present("encrypt") {
         encrypt(matches.value_of(medium_type).unwrap());
@@ -58,4 +60,5 @@ fn main() {
     if matches.is_present("decrypt") {
         decrypt(matches.value_of(medium_type).unwrap());
     }
+
 }
