@@ -1,4 +1,4 @@
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug)]
 
 pub enum MediumType {
    File,

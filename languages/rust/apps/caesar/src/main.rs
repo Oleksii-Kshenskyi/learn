@@ -34,6 +34,12 @@ fn main() {
                             .long("decrypt")
                             .takes_value(false)
                             .help("If specified, the application decrypts the text specified in the <-c|-f> option's value.")
+                        ).arg(Arg::with_name("key")
+                            .short("k")
+                            .long("key")
+                            .value_name("KEY_NUMBER")
+                            .required(true)
+                            .help("Encryption or decryption key. Has to be a valid integer number from 1 to 65535.")
                         ).group(ArgGroup::with_name("text-medium")
                             .args(&["use-file", "use-command-line"])
                             .required(true)
@@ -53,10 +59,12 @@ fn main() {
     }
     let medium = Medium::new(medium_type, matches.value_of(medium_type).unwrap());
 
+    let key_int: u16 = key_from_string(String::from(matches.value_of("key").unwrap()));
+
     if matches.is_present("encrypt") {
-        encrypt(medium);
+        encrypt(medium, key_int);
     }
     else if matches.is_present("decrypt") {
-        decrypt(medium);
+        decrypt(medium, key_int);
     }
 }
