@@ -39,12 +39,12 @@ fn main() {
                             .long("key")
                             .value_name("KEY_NUMBER")
                             .required(true)
-                            .help("Encryption or decryption key. Has to be a valid integer number from 1 to 65535.")
-                        ).group(ArgGroup::with_name("text-medium")
+                            .help(format!("Encryption or decryption key. Has to be a valid integer number from 1 to {}.", std::u16::MAX).as_str())
+                        ).group(ArgGroup::with_name("medium-type")
                             .args(&["use-file", "use-command-line"])
                             .required(true)
                             .multiple(false)
-                        ).group(ArgGroup::with_name("application-mode")
+                        ).group(ArgGroup::with_name("action-type")
                             .args(&["encrypt", "decrypt"])
                             .required(true)
                             .multiple(false)
@@ -62,9 +62,9 @@ fn main() {
     let key_int: u16 = key_from_string(String::from(matches.value_of("key").unwrap()));
 
     if matches.is_present("encrypt") {
-        encrypt(medium, key_int);
+        perform_crypto_action(medium, key_int, ActionType::Encrypt);
     }
     else if matches.is_present("decrypt") {
-        decrypt(medium, key_int);
+        perform_crypto_action(medium, key_int, ActionType::Decrypt);
     }
 }
