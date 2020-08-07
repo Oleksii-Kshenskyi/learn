@@ -1,5 +1,7 @@
 #include <iostream>
 #include <tuple>
+#include <typeinfo>
+#include <vector>
 
 enum TestIt {
    a, b, c
@@ -10,12 +12,36 @@ bool enum_func(TestIt the_enum)
    return the_enum == 0 ? false : true; // comparisons work directly with enums, but not with enum classes
 }
 
+void argument_check(char a, int b, double c)
+{
+   std::cout << "Yes indeed, a is " << a << "." << std::endl;
+   std::cout << "Yes indeed, b is " << b << "." << std::endl;
+   std::cout << "Yes indeed, c is " << c << "." << std::endl;
+}
+
 void cpp17_POGGERS()
 {
    auto [a, b, c] { std::make_tuple('a', 1, 33.336) };
    std::cout << "a is " << a << " POGGERS" << std::endl;
    std::cout << "b is " << b << " POGGERS" << std::endl;
    std::cout << "c is " << c << " POGGERS" << std::endl;
+   argument_check(a, b, c);
+}
+
+void types()
+{
+   std::string str { "KEKW" };
+   std::vector v {1, 2, 3, 4, 5};
+   auto [a, b, c] { std::make_tuple('a', 1, 33.44) };
+   int& ir = b;
+   int* ip = &b;
+   std::cout << "STR: " << typeid(str).name() << std::endl;
+   std::cout << "VEC: " << typeid(v).name() << std::endl;
+   std::cout << "a, b, c: " << typeid(a).name() << ", " 
+                            << typeid(b).name() << ", "
+                            << typeid(c).name() << std::endl;
+   std::cout << "ir: " << typeid(ir).name() << std::endl;
+   std::cout << "ip: " << typeid(ip).name() << std::endl;
 }
 
 auto returns_auto_type_POGGERS(auto a1, auto a2)
@@ -60,6 +86,8 @@ void lambdas()
 
 int main()
 {
-   lambdas();
+   //cpp17_POGGERS();
+   // lambdas();
+   types();
    return 0;
 }
