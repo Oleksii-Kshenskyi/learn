@@ -10,8 +10,9 @@
          => The order is random, and for each of the n produced versions of s this word order is unique.
             => Essentially this means producing n different shuffled versions of s.
 =? What do we need to implement such a word shuffler?
-   => We need an algorithm that randomly shuffles characters in a string.
-      => Here we also need a basic random number generator.
+   =+ We need an algorithm that randomly shuffles characters in a string.
+      =+ Here we also need a basic random number generator.
+   => We need a mechanism to check CLI parameters for correctness.
    => We need a mechanism that checks the produced randomized s versions for uniqueness.
       => Also, if a produced version is not unique, reject it and re-launch the algorithm.
    => We need to check for the upper bound of possible variants of s.
