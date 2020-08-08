@@ -1,3 +1,5 @@
+#pragma once
+
 #include <memory>
 
 #include "standard_lib_rng.hpp"
