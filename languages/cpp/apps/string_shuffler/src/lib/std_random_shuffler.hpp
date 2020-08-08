@@ -16,7 +16,7 @@ namespace shuffler::lib
             std::string shuffled { str };
             for(auto index { 0 }; index < shuffled.length(); index++)
             {
-               auto random_index { rng->generate_between(0, shuffled.length()) };
+               auto random_index { rng->generate_between(0, shuffled.length() - 1) };
                std::swap(shuffled[index], shuffled[random_index]);
             }
             return shuffled;
