@@ -1,0 +1,22 @@
+=? What does the string shuffler need to do?
+   => It needs to shuffle strings.
+   => This means that it needs to be able to randomly change positions of characters in a string.
+   => The overall algorithm is as follows.
+      => The application receives two parameters from the command line: the string itself and a positive integer number.
+         => Let's say that the string is s and the number is n.
+      => It needs to create n different versions of s so that:
+         => All the resulting strings are of exactly the same length as s and contain exactly same characters as s.
+         => However, the order of those characters is different.
+         => The order is random, and for each of the n produced versions of s this word order is unique.
+            => Essentially this means producing n different shuffled versions of s.
+=? What do we need to implement such a word shuffler?
+   => We need an algorithm that randomly shuffles characters in a string.
+      => Here we also need a basic random number generator.
+   => We need a mechanism that checks the produced randomized s versions for uniqueness.
+      => Also, if a produced version is not unique, reject it and re-launch the algorithm.
+   => We need to check for the upper bound of possible variants of s.
+      => In general, the amount of possible permutations is calculated as p = n!
+         => p is the amount of permutations;
+         => n is the amount of elements that take part in the permutating process (the amount of characters in a string in our case)
+         => ! is the factorial operation.
+      => If the amount of permutations possible is smaller than the number provided by the user, issue a warning and only print the amount possible.

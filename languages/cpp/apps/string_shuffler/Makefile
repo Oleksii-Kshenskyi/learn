@@ -1,4 +1,4 @@
-.SILENT: all clean compile rebuild
+.SILENT: all clean compile rebuild val
 
 all: rebuild
 
@@ -11,3 +11,6 @@ clean:
 	rm -rf build
 
 rebuild: clean compile
+
+val: compile
+	valgrind -s --leak-check=full --show-leak-kinds=all build/wls
