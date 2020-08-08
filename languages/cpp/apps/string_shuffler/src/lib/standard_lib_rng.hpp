@@ -12,7 +12,7 @@ namespace shuffler::lib
          {}
          virtual unsigned int generate_between(unsigned int lower_bound, unsigned int upper_bound) override
          {
-            std::uniform_int_distribution<> distribution(lower_bound, upper_bound);
+            std::uniform_int_distribution<unsigned int> distribution(lower_bound, upper_bound);
             return distribution(m_mt);
          }
       private:
