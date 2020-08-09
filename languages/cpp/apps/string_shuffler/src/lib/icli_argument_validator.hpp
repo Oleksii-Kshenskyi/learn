@@ -19,7 +19,7 @@ namespace shuffler::lib
    struct CLIArgs
    {
       std::string string_to_shuffle;
-      unsigned int number_of_shuffles;
+      unsigned long number_of_shuffles;
    };
 
    class ICLIArgumentValidator {
