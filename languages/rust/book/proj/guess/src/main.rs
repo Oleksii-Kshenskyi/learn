@@ -16,6 +16,7 @@ fn main() {
     io::stdin()
         .read_line(&mut guess)
         .expect("Failed to read your guess...");
+    let guess: u32 = guess.trim().parse().expect("Your guess should be a number.");
 
     match guess.cmp(&secret_number) {
         Ordering::Less => println!("The number I'm thinking of is smaller!"),
