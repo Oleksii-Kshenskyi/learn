@@ -1,8 +1,10 @@
+use std::io::Write;
 use std::io;
 
 fn main() {
     println!("Guess the number I'm thinking of!");
-    println!("What's your guess? Put it here ==> ");
+    print!("What's your guess? Put it here ==> ");
+    io::stdout().flush().unwrap();
 
     let mut guess = String::new();
     io::stdin()
