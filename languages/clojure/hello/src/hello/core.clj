@@ -15,6 +15,9 @@
     )
 )
 
+(defn sum_of_n_sums_2 [xs]
+  (apply + (reductions + xs)))
+
 (defn -main [& args]
-  (println "OMG ACTUALLY WROKS?! POG!!! :: " (sum_of_n_sums [11, 11, 11, 11, 11, 11]))
+  (println "OMG ACTUALLY WROKS?! POG!!! :: " (sum_of_n_sums_2 [11, 11, 11, 11, 11, 11]))
 )
