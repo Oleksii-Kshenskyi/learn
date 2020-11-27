@@ -50,7 +50,7 @@
             (foldl + 0 the_list)
             (if (empty? the_list) 
                 0 
-                (sum_of_nth_sums (rest the_list))
+                (sum_of_nth_sums (drop-right the_list 1))
             )
         )
     )
