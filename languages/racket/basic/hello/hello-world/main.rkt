@@ -1,7 +1,8 @@
 #lang racket/base
 
 (module+ test
-  (require rackunit))
+    (require rackunit)
+)
 
 ;; Notice
 ;; To install (from within the package directory):
@@ -28,23 +29,37 @@
 
 
 (module+ test
-  ;; Any code in this `test` submodule runs when this file is run using DrRacket
-  ;; or with `raco test`. The code here does not run when this file is
-  ;; required by another module.
+    ;; Any code in this `test` submodule runs when this file is run using DrRacket
+    ;; or with `raco test`. The code here does not run when this file is
+    ;; required by another module.
 
-  (check-equal? (+ 2 2) 4))
+    (check-equal? (+ 2 2) 4)
+)
 
 (module+ main
-  ;; (Optional) main submodule. Put code here if you need it to be executed when
-  ;; this file is run using DrRacket or the `racket` executable.  The code here
-  ;; does not run when this file is required by another module. Documentation:
-  ;; http://docs.racket-lang.org/guide/Module_Syntax.html#%28part._main-and-test%29
+    ;; (Optional) main submodule. Put code here if you need it to be executed when
+    ;; this file is run using DrRacket or the `racket` executable.  The code here
+    ;; does not run when this file is required by another module. Documentation:
+    ;; http://docs.racket-lang.org/guide/Module_Syntax.html#%28part._main-and-test%29
 
-  (require racket/cmdline)
-  (define who (box "world"))
-  (command-line
-    #:program "my-program"
-    #:once-each
-    [("-n" "--name") name "Who to say hello to" (set-box! who name)]
-    #:args ()
-    (printf "hello ~a~n" (unbox who))))
+    (require racket/cmdline)
+    (require racket/list)
+
+    (define (sum_of_nth_sums the_list)
+        (+ 
+            (foldl + 0 the_list)
+            (if (empty? the_list) 
+                0 
+                (sum_of_nth_sums (rest the_list))
+            )
+        )
+    )
+
+    (command-line
+        #:program "my-program"
+        #:args (one_arg . rest)
+        (define string_list (append (list one_arg) rest))
+        (define int_list (map string->number string_list))
+        (printf "Sum of nth sums Pogomega => ~a\n" (sum_of_nth_sums int_list)))
+)
+
