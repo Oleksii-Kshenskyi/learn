@@ -84,3 +84,19 @@ pub fn try_return_values()
     println!("nuthin() returns {:?}", nuthin());
     println!("are () and {{}} the same? ==> {}", () == {});
 }
+
+pub fn run()
+{
+    println!("=======TYPES TEST==========");
+    try_numeral_systems();
+    println!("\n================\n");
+    try_scalars();
+    println!("\n================\n");
+    try_tuples();
+    println!("\n================\n");
+    try_arrays();
+    println!("\n================\n");
+    try_return_values();
+    println!("=======END TYPES TEST======");
+    println!("\n\n");
+}
