@@ -1,7 +1,26 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"strconv"
+)
+
+func stringArrToIntArr(strarr []string) []int {
+	var result []int
+	for _, element := range strarr {
+		converted, err := strconv.Atoi(element)
+		if err != nil {
+			fmt.Println("NOPE: Could not convert", element, "to string!")
+			os.Exit(1)
+		}
+		result = append(result, converted)
+	}
+
+	return result
+}
 
 func main() {
-	fmt.Println("Hello Go World!")
+	cliArgs := os.Args[1:]
+	fmt.Println("CLI args provided: ", stringArrToIntArr(cliArgs))
 }
