@@ -1,0 +1,9 @@
+{
+	"authors": [
+		"Einax"
+	],
+	"copyright": "No copyright, public domain",
+	"description": "Smallest possible SQLite-based DB to figure out the D language.",
+	"license": "The Unlicense",
+	"name": "smol_db"
+}
