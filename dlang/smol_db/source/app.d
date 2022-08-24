@@ -1,6 +1,7 @@
 import std.stdio;
 import std.getopt;
 import std.range;
+import data;
 
 int main(string[] args)
 {
@@ -36,6 +37,17 @@ int main(string[] args)
         return 1;
     }
 
-    writeln("The number of arguments that have been set is ", num_of_set);
+    auto db = data.init();
+
+    if(list_records)
+        data.select_and_print(db);
+    else if(write_new_record)
+        data.insert_new_game(db);
+    else if(!lookup_by_name.empty)
+        data.select_by_name(db, &lookup_by_name);
+    else if(!lookup_by_developer.empty)
+        data.select_by_developer(db, &lookup_by_developer);
+    else if(!lookup_by_publisher.empty)
+        data.select_by_publisher(db, &lookup_by_publisher);
     return 0;
 }

@@ -6,6 +6,9 @@
 	"description": "Smallest possible SQLite-based DB to figure out the D language.",
 	"license": "The Unlicense",
 	"name": "smol_db",
-	"dependencies": {"d2sqlite3": "~>1.0.0"}
-	
+	"dependencies": {"d2sqlite3": "~>1.0.0"},
+	"subConfigurations": {
+        "d2sqlite3": "with-lib"
+	},
+	"lflags": ["-lsqlite3"]
 }
