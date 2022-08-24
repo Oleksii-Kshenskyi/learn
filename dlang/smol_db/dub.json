@@ -5,5 +5,7 @@
 	"copyright": "No copyright, public domain",
 	"description": "Smallest possible SQLite-based DB to figure out the D language.",
 	"license": "The Unlicense",
-	"name": "smol_db"
+	"name": "smol_db",
+	"dependencies": {"d2sqlite3": "~>1.0.0"}
+	
 }
