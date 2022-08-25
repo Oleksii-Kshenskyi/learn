@@ -1,6 +1,9 @@
 module data;
 
 import std.stdio;
+import std.typecons;
+import std.conv;
+import std.string;
 import d2sqlite3;
 import std.typecons : Nullable;
 
@@ -23,7 +26,6 @@ Statement insert_statement(Database db) {
 }
 
 
-
 void select_and_print(Database db) {
     auto count = db.execute("SELECT count(*) FROM videogame")
                    .oneValue!long;
@@ -32,8 +34,6 @@ void select_and_print(Database db) {
     auto result = db.execute("SELECT * FROM videogame");
     writeln("========VIDEOGAMES=========="); writeln();
     foreach(record; result) {
-        auto id = record.peek!long(0);
-        writeln("Row ID: ", id);
         writeln("Game Title: ", record["title"].as!string);
         writeln("Released In: ", record["year"].as!int);
         writeln("Developer Studio: ", record["developer"].as!string);
@@ -43,7 +43,17 @@ void select_and_print(Database db) {
     writeln("===========END=============");
 }
 
-void insert_new_game(Database db) {}
+void insert_new_game(Database db) {
+    writeln("Please tell me some info about a videogame...");
+    write("Game Title? => "); auto title = readln.strip;
+    write("Year the game was released in? => "); ulong year = readln.strip.to!ulong;
+    write("Studio that developed the game? => "); string dev = readln.strip;
+    write("Game's publisher? => "); string pub = readln.strip;
+    write("Game's genre? => "); string genre = readln.strip;
+
+    insert_statement(db).inject(title, year, dev, pub, genre);
+}
+
 void select_by_name(Database db, string* name) {}
 void select_by_developer(Database db, string* developer) {}
 void select_by_publisher(Database db, string* publisher) {}
