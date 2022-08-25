@@ -7,14 +7,14 @@ int main(string[] args)
 {
     bool list_records = false;
     bool write_new_record = false;
-    string lookup_by_name = "";
+    string lookup_by_title = "";
     string lookup_by_developer = "";
     string lookup_by_publisher = "";
     auto parsedArgs = getopt(
         args,
         "list|l", "List all currently available game records.", &list_records,
         "write|w", "Write a new record to the database.", &write_new_record,
-        "byname|n", "Lookup a game in the existing records by name.", &lookup_by_name,
+        "bytitle|t", "Lookup a game in the existing records by its title.", &lookup_by_title,
         "bydev|d", "Lookup a game in the existing records by its development studio name.", &lookup_by_developer,
         "bypub|p", "Lookup a game in the existing records by its publisher name.", &lookup_by_publisher
     );
@@ -27,7 +27,7 @@ int main(string[] args)
     ushort num_of_set = 0;
     if(list_records) num_of_set++;
     if(write_new_record) num_of_set++;
-    if(!lookup_by_name.empty) num_of_set++;
+    if(!lookup_by_title.empty) num_of_set++;
     if(!lookup_by_developer.empty) num_of_set++;
     if(!lookup_by_publisher.empty) num_of_set++;
     if(num_of_set != 1) {
@@ -43,8 +43,8 @@ int main(string[] args)
         data.select_and_print(db);
     else if(write_new_record)
         data.insert_new_game(db);
-    else if(!lookup_by_name.empty)
-        data.select_by_name(db, &lookup_by_name);
+    else if(!lookup_by_title.empty)
+        data.select_by_name(db, &lookup_by_title);
     else if(!lookup_by_developer.empty)
         data.select_by_developer(db, &lookup_by_developer);
     else if(!lookup_by_publisher.empty)

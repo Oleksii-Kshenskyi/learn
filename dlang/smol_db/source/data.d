@@ -54,6 +54,21 @@ void insert_new_game(Database db) {
     insert_statement(db).inject(title, year, dev, pub, genre);
 }
 
-void select_by_name(Database db, string* name) {}
+void select_by_name(Database db, string* title) {
+    writeln("Games in the database that contain '", *title, "' in the title:");
+    auto count = db.execute("SELECT count(*) FROM videogame WHERE title LIKE '%" ~ *title ~ "%'").oneValue!ulong;
+    writeln("Games found: ", count);
+    auto result = db.execute("SELECT * FROM videogame WHERE title LIKE '%" ~ *title ~ "%'");
+    writeln("========SEARCH BY TITLE=========="); writeln();
+    foreach(record; result) {
+        writeln("Game Title: ", record["title"].as!string);
+        writeln("Released In: ", record["year"].as!int);
+        writeln("Developer Studio: ", record["developer"].as!string);
+        writeln("Publisher: ", record["publisher"].as!string);
+        writeln("Genre: ", record["genre"].as!string); writeln();
+    }
+    writeln("==============END===============");
+}
+
 void select_by_developer(Database db, string* developer) {}
 void select_by_publisher(Database db, string* publisher) {}
