@@ -86,4 +86,18 @@ void select_by_developer(Database db, string* developer) {
     writeln("================END=================");
 }
 
-void select_by_publisher(Database db, string* publisher) {}
+void select_by_publisher(Database db, string* publisher) {
+    writeln("Games in the database that contain '", *publisher, "' in the publisher name:");
+    auto count = db.execute("SELECT count(*) FROM videogame WHERE publisher LIKE '%" ~ *publisher ~ "%'").oneValue!ulong;
+    writeln("Games found: ", count);
+    auto result = db.execute("SELECT * FROM videogame WHERE publisher LIKE '%" ~ *publisher ~ "%'");
+    writeln("========SEARCH BY PUB NAME=========="); writeln();
+    foreach(record; result) {
+        writeln("Game Title: ", record["title"].as!string);
+        writeln("Released In: ", record["year"].as!int);
+        writeln("Developer Studio: ", record["developer"].as!string);
+        writeln("Publisher: ", record["publisher"].as!string);
+        writeln("Genre: ", record["genre"].as!string); writeln();
+    }
+    writeln("================END=================");
+}
