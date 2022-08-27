@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SQLite;
-using SQLitePCL;
+﻿using SQLite;
 
 namespace SmolDB
 {
@@ -25,18 +19,11 @@ namespace SmolDB
     }
     internal class Database
     {
-        private SQLiteConnection _db;
-
-        public Database(string Folder) {
-            var databasePath = Path.Combine(Folder, "database.db");
-            _db = new SQLiteConnection(databasePath);
-            _db.CreateTable<DBSchema>();
-        }
-        public void ListRecords() {
-            Console.WriteLine("Games in database: " + _db.Table<DBSchema>().Count());
-            Console.WriteLine("===========VIDEOGAMES=========="); Console.WriteLine();
-            var selectAll = _db.Table<DBSchema>();
-            foreach (var record in selectAll) {
+        private readonly SQLiteConnection _db;
+        private void PrintQuery(TableQuery<DBSchema> query, string withPrompt = "") {
+            Console.WriteLine($"=========={ withPrompt }==========="); Console.WriteLine();
+            foreach (var record in query)
+            {
                 Console.WriteLine("ID: " + record.Id);
                 Console.WriteLine("Title: " + record.Title);
                 Console.WriteLine("Year: " + record.Year);
@@ -45,7 +32,18 @@ namespace SmolDB
                 Console.WriteLine("Genre: " + record.Genre);
                 Console.WriteLine();
             }
-            Console.WriteLine("===========VIDEOGAMES==========");
+            Console.WriteLine($"===========END { withPrompt }==========");
+        }
+
+        public Database(string Folder) {
+            var databasePath = Path.Combine(Folder, "database.db");
+            _db = new SQLiteConnection(databasePath);
+            _db.CreateTable<DBSchema>();
+        }
+        public void ListRecords() {
+            var query = _db.Table<DBSchema>();
+            Console.WriteLine("Games in database: " + query.Count());
+            PrintQuery(query, "VIDEOGAMES");
         }
         public void WriteNewRecord() {
             Console.WriteLine("Please provide info for a new videogame record in the database...");
@@ -76,8 +74,37 @@ namespace SmolDB
             };
             _db.Insert(record);
         }
-        public void LookupByTitle(string Title) { }
-        public void LookupByDeveloper(string Developer) { }
-        public void LookupByPublisher(string Publisher) { }
+        public void LookupByTitle(string Title) {
+            if (Title == null) {
+                Console.WriteLine("ERROR: title to look for cannot be empty!");
+                return;
+            }
+            Console.WriteLine("Looking up games by title...");
+            var lookedUp = _db.Table<DBSchema>().Where(game => game.Title != null && game.Title.Contains(Title));
+            Console.WriteLine($"Games found: { lookedUp.Count()}");
+            PrintQuery(lookedUp);
+        }
+        public void LookupByDeveloper(string Developer) {
+            if (Developer == null)
+            {
+                Console.WriteLine("ERROR: developer name to look for cannot be empty!");
+                return;
+            }
+            Console.WriteLine("Looking up games by developer studio name...");
+            var lookedUp = _db.Table<DBSchema>().Where(game => game.Developer != null && game.Developer.Contains(Developer));
+            Console.WriteLine($"Games found: {lookedUp.Count()}");
+            PrintQuery(lookedUp);
+        }
+        public void LookupByPublisher(string Publisher) {
+            if (Publisher == null)
+            {
+                Console.WriteLine("ERROR: publisher name to look for cannot be empty!");
+                return;
+            }
+            Console.WriteLine("Looking up games by publisher name...");
+            var lookedUp = _db.Table<DBSchema>().Where(game => game.Publisher != null && game.Publisher.Contains(Publisher));
+            Console.WriteLine($"Games found: {lookedUp.Count()}");
+            PrintQuery(lookedUp);
+        }
     }
 }
