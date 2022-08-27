@@ -1,11 +1,12 @@
 ﻿using CommandLine;
+using SmolDB;
 
 var result = Parser.Default.ParseArguments<Options>(args)
     .WithParsed(o =>
     {
-        Console.WriteLine("list? " + o.ListRecords);
-        Console.WriteLine("write? " + o.WriteNewRecord);
-        Console.WriteLine("bytitle? " + (o.Title != null ? o.Title : "null"));
-        Console.WriteLine("bydev? " + (o.Developer != null ? o.Developer : "null"));
-        Console.WriteLine("bypub? " + (o.Publisher != null ? o.Publisher : "null"));
+        if (o.ListRecords) Database.ListRecords();
+        else if (o.WriteNewRecord) Database.WriteNewRecord();
+        else if (o.Title != null) Database.LookupByTitle(o.Title);
+        else if (o.Developer != null) Database.LookupByDeveloper(o.Developer);
+        else if (o.Publisher != null) Database.LookupByPublisher(o.Publisher);
     });
