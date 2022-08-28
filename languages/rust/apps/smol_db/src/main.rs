@@ -2,8 +2,8 @@ extern crate clap;
 use clap::Parser;
 use rusqlite::Error;
 
-mod db;
-use crate::db::*;
+mod videogames;
+use crate::videogames::*;
 
 #[derive(Parser)]
 #[clap(author = "Oleksii Kshenskyi")]
