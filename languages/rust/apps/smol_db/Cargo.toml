@@ -7,3 +7,4 @@ edition = "2018"
 
 [dependencies]
 clap = { version = "3.2.17", features = ["derive"] }
+rusqlite = { version = "0.28.0", features = ["bundled"] }

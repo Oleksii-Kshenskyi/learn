@@ -33,3 +33,7 @@ dist-newstyle
 build
 
 .dub/
+
+*.db
+smol_db
+SmolDB*

@@ -1,5 +1,9 @@
 extern crate clap;
 use clap::Parser;
+use rusqlite::Error;
+
+mod db;
+use crate::db::*;
 
 #[derive(Parser)]
 #[clap(author = "Oleksii Kshenskyi")]
@@ -22,11 +26,25 @@ struct Cli {
     lookup_by_publisher: Option<String>
 }
 
-fn main() {
+fn main() -> Result<(), Error> {
     let cli = Cli::parse();
-    dbg!(cli.list_records);
-    dbg!(cli.write_new_record);
-    dbg!(cli.lookup_by_title);
-    dbg!(cli.lookup_by_developer);
-    dbg!(cli.lookup_by_publisher);
+    
+    let db = Database::new()?;
+
+    if cli.list_records {
+        return db.list_records();
+    }
+    else if cli.write_new_record {
+        return db.write_new_record();
+    }
+    else if let Some(title) = cli.lookup_by_title {
+        return db.lookup_by_title(&title);
+    }
+    else if let Some(developer) = cli.lookup_by_developer {
+        return db.lookup_by_developer(&developer);
+    }
+    else if let Some(publisher) = cli.lookup_by_publisher {
+        return db.lookup_by_publisher(&publisher);
+    }
+    else { unreachable!("None of the options are true. This should be impossible."); }
 }
