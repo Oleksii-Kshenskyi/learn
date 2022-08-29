@@ -12,6 +12,13 @@ pub struct Videogame {
     pub genre: String
 }
 
+#[derive(Debug)]
+pub struct TextUI {
+    pub action_message: String,
+    pub record_count_message: String,
+    pub search_result_header: String
+}
+
 pub struct Database {
     db: Connection,
 }
@@ -38,28 +45,12 @@ impl Database {
     }
 
     pub fn list_records(&self) -> Result<(), Error> {
-        println!("Listing all games in the database...");
-        let mut games = self.db.prepare("SELECT * FROM videogame")?;
-        let games_iter = games.query_map([], |row| {
-            Ok(Videogame {
-                id: row.get(0)?,
-                title: row.get(1)?,
-                year: row.get(2)?,
-                developer: row.get(3)?,
-                publisher: row.get(4)?,
-                genre: row.get(5)?,
-            })
-        })?;
-        let games_vec = games_iter.collect::<Vec<_>>();
-        
-        println!("Games in database: {}", games_vec.len());
-        println!("\n============VIDEOGAMES===========\n");
-        for game in games_vec {
-            println!("{:#?}\n", game?);
-        }
-        println!("\n==========END VIDEOGAMES=========\n");
-
-        Ok(())
+        self.select_query(TextUI {
+            action_message: "Listing all games in the database...".to_owned(),
+            record_count_message: "Games in database".to_owned(),
+            search_result_header: "VIDEOGAMES".to_owned()
+        },
+        "SELECT * FROM videogame".to_string())
     }
 
     pub fn write_new_record(&self) -> Result<(), Error> {
@@ -90,58 +81,35 @@ impl Database {
     }
 
     pub fn lookup_by_title(&self, title: &str) -> Result<(), Error> {
-        println!("Listing games by title: {}...", title);
-        let mut games = self.db.prepare(format!("SELECT * FROM videogame WHERE title LIKE '%{}%'", title).as_str())?;
-        let games_iter = games.query_map([], |row| {
-            Ok(Videogame {
-                id: row.get(0)?,
-                title: row.get(1)?,
-                year: row.get(2)?,
-                developer: row.get(3)?,
-                publisher: row.get(4)?,
-                genre: row.get(5)?,
-            })
-        })?;
-        let games_vec = games_iter.collect::<Vec<_>>();
-        
-        println!("Games with title '{}': {}", title, games_vec.len());
-        println!("\n============SEARCH BY TITLE===========\n");
-        for game in games_vec {
-            println!("{:#?}\n", game?);
-        }
-        println!("\n==========END SEARCH BY TITLE=========\n");
-
-        Ok(())
+        self.select_query( TextUI {
+            action_message: format!("Listing games by title: {}...", title),
+            record_count_message: format!("Games with title '{}'", title),
+            search_result_header: "SEARCH BY TITLE".to_owned()
+        }, 
+        format!("SELECT * FROM videogame WHERE title LIKE '%{}%'", title))
     }
 
     pub fn lookup_by_developer(&self, developer: &str) -> Result<(), Error> {
-        println!("Listing games by developer studio name: {}...", developer);
-        let mut games = self.db.prepare(format!("SELECT * FROM videogame WHERE developer LIKE '%{}%'", developer).as_str())?;
-        let games_iter = games.query_map([], |row| {
-            Ok(Videogame {
-                id: row.get(0)?,
-                title: row.get(1)?,
-                year: row.get(2)?,
-                developer: row.get(3)?,
-                publisher: row.get(4)?,
-                genre: row.get(5)?,
-            })
-        })?;
-        let games_vec = games_iter.collect::<Vec<_>>();
-        
-        println!("Games with developer name '{}': {}", developer, games_vec.len());
-        println!("\n============SEARCH BY DEV===========\n");
-        for game in games_vec {
-            println!("{:#?}\n", game?);
-        }
-        println!("\n==========END SEARCH BY DEV=========\n");
-
-        Ok(())
+        self.select_query( TextUI {
+            action_message: format!("Listing games by developer studio name: {}...", developer),
+            record_count_message: format!("Games with developer studio name '{}'", developer),
+            search_result_header: "SEARCH BY DEV".to_owned()
+        }, 
+        format!("SELECT * FROM videogame WHERE developer LIKE '%{}%'", developer))
     }
 
     pub fn lookup_by_publisher(&self, publisher: &str) -> Result<(), Error> {
-        println!("Listing games by publisher name: {}...", publisher);
-        let mut games = self.db.prepare(format!("SELECT * FROM videogame WHERE publisher LIKE '%{}%'", publisher).as_str())?;
+        self.select_query( TextUI {
+            action_message: format!("Listing games by publisher name: {}...", publisher),
+            record_count_message: format!("Games with publisher name '{}'", publisher),
+            search_result_header: "SEARCH BY PUB".to_owned()
+        }, 
+        format!("SELECT * FROM videogame WHERE publisher LIKE '%{}%'", publisher))
+    }
+
+    fn select_query(&self, ti: TextUI, query: String) -> Result<(), Error> {
+        println!("{}", ti.action_message);
+        let mut games = self.db.prepare(query.as_str())?;
         let games_iter = games.query_map([], |row| {
             Ok(Videogame {
                 id: row.get(0)?,
@@ -154,12 +122,12 @@ impl Database {
         })?;
         let games_vec = games_iter.collect::<Vec<_>>();
         
-        println!("Games with publisher name '{}': {}", publisher, games_vec.len());
-        println!("\n============SEARCH BY PUB===========\n");
+        println!("{}: {}", ti.record_count_message, games_vec.len());
+        println!("\n============{}===========\n", ti.search_result_header);
         for game in games_vec {
             println!("{:#?}\n", game?);
         }
-        println!("\n==========END SEARCH BY PUB=========\n");
+        println!("==========END {}=========\n", ti.search_result_header);
 
         Ok(())
     }
