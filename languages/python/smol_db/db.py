@@ -1,17 +1,39 @@
 import click
+from simplesqlite import SimpleSQLite
+from simplesqlite.model import Integer, Model, Text
 
 def count_args(my_argies):
     return len(list(filter(lambda x: x == True, my_argies)))
 
+class Videogame(Model):
+    id = Integer(primary_key=True, autoincrement=True)
+    title = Text(not_null=True)
+    year = Integer()
+    developer = Text()
+    publisher = Text()
+    genre = Text()
+
 class SmolDB:
     def __init__(self):
-        pass
+        self.db = SimpleSQLite("database.db", "w")
+        Videogame.attach(self.db)
+        Videogame.create()
 
     def list_records(self):
-        pass
+        print("========VIDEOGAMES===========\n")
+        for record in Videogame.select():
+            print(f"{record}"); print()
+        print("\n=========END VIDEOGAMES=========\n")
+        
 
     def write_new_record(self):
-        pass
+        print("Please share some info about a videogame to put in the database...")
+        print("Game's title? => ", sep=""); t = str(input())
+        print("Game's year of release? => ", sep=""); y = int(input())
+        print("Game's developer studio? => ", sep=""); d = str(input())
+        print("Game's publisher? => ", sep=""); p = str(input())
+        print("Game's genre? => ", sep=""); g = str(input())
+        Videogame.insert(Videogame(title=t, year=y, developer=d, publisher=p, genre=g))
 
     def lookup_by_title(self, title):
         pass
