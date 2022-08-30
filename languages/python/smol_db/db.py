@@ -1,39 +1,51 @@
 import click
-from simplesqlite import SimpleSQLite
-from simplesqlite.model import Integer, Model, Text
+import sqlite3
 
 def count_args(my_argies):
     return len(list(filter(lambda x: x == True, my_argies)))
 
-class Videogame(Model):
-    id = Integer(primary_key=True, autoincrement=True)
-    title = Text(not_null=True)
-    year = Integer()
-    developer = Text()
-    publisher = Text()
-    genre = Text()
-
 class SmolDB:
     def __init__(self):
-        self.db = SimpleSQLite("database.db", "w")
-        Videogame.attach(self.db)
-        Videogame.create()
+        self.db = sqlite3.connect("./database.db")
+        self.db.execute("""CREATE TABLE IF NOT EXISTS videogame (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            year INTEGER,
+            developer TEXT,
+            publisher TEXT,
+            genre TEXT
+        )""")
+        self.db.commit()
+    
+    def __enter__(self):
+        return self
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.db.close()
 
     def list_records(self):
+        rows = self.db.execute("SELECT * FROM videogame").fetchall()
+        count = len(rows)
+        print(f"\nGames in database: {count}")
         print("========VIDEOGAMES===========\n")
-        for record in Videogame.select():
-            print(f"{record}"); print()
-        print("\n=========END VIDEOGAMES=========\n")
-        
+        for record in rows:
+            print(f"ID: {record[0]}");
+            print(f"Game Title: {record[1]}");
+            print(f"Year of Release: {record[2]}");
+            print(f"Developer: {record[3]}");
+            print(f"Publisher: {record[4]}");
+            print(f"Genre: {record[5]}"); print()
+        print("========END VIDEOGAMES=======\n")
 
     def write_new_record(self):
         print("Please share some info about a videogame to put in the database...")
-        print("Game's title? => ", sep=""); t = str(input())
-        print("Game's year of release? => ", sep=""); y = int(input())
-        print("Game's developer studio? => ", sep=""); d = str(input())
-        print("Game's publisher? => ", sep=""); p = str(input())
-        print("Game's genre? => ", sep=""); g = str(input())
-        Videogame.insert(Videogame(title=t, year=y, developer=d, publisher=p, genre=g))
+        print("Game's title? => ", end='', sep=""); t = str(input())
+        print("Game's year of release? => ", end='', sep=""); y = int(input())
+        print("Game's developer studio? => ", end='', sep=""); d = str(input())
+        print("Game's publisher? => ", end='', sep=""); p = str(input())
+        print("Game's genre? => ", end='', sep=""); g = str(input())
+        self.db.execute(f"""INSERT INTO videogame (title, year, developer, publisher, genre)
+                           VALUES ('{t}', {y}, '{d}', '{p}', '{g}')""")
+        self.db.commit()
 
     def lookup_by_title(self, title):
         pass
@@ -54,18 +66,18 @@ def run_cli(list, write, title, developer, publisher):
     if count_args([list, write, title != None, developer != None, publisher != None]) != 1:
         print("ERROR: all the arguments are mutually exclusive, and the app expects exactly one to be provided.")
         return
-    db = SmolDB()
-    if list:
-        db.list_records()
-    elif write:
-        db.write_new_record()
-    elif title != None:
-        db.lookup_by_title(title)
-    elif developer != None:
-        db.lookup_by_developer(developer)
-    elif publisher != None:
-        db.lookup_by_publisher(publisher)
-    else: raise "ERROR: None of the arguments are used, this code should be unreachable!"
+    with SmolDB() as db:
+        if list:
+            db.list_records()
+        elif write:
+            db.write_new_record()
+        elif title != None:
+            db.lookup_by_title(title)
+        elif developer != None:
+            db.lookup_by_developer(developer)
+        elif publisher != None:
+            db.lookup_by_publisher(publisher)
+        else: raise "ERROR: None of the arguments are used, this code should be unreachable!"
 
 if __name__ == "__main__":
     run_cli()
