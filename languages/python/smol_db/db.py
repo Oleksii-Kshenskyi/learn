@@ -23,18 +23,10 @@ class SmolDB:
         self.db.close()
 
     def list_records(self):
-        rows = self.db.execute("SELECT * FROM videogame").fetchall()
-        count = len(rows)
-        print(f"\nGames in database: {count}")
-        print("========VIDEOGAMES===========\n")
-        for record in rows:
-            print(f"ID: {record[0]}");
-            print(f"Game Title: {record[1]}");
-            print(f"Year of Release: {record[2]}");
-            print(f"Developer: {record[3]}");
-            print(f"Publisher: {record[4]}");
-            print(f"Genre: {record[5]}"); print()
-        print("========END VIDEOGAMES=======\n")
+        self.select_query("Listing all the games in the database...",
+                          "Games in database",
+                          "VIDEOGAMES",
+                          "SELECT * FROM videogame")
 
     def write_new_record(self):
         print("Please share some info about a videogame to put in the database...")
@@ -48,13 +40,37 @@ class SmolDB:
         self.db.commit()
 
     def lookup_by_title(self, title):
-        pass
+        self.select_query(f"Listing games with title '{title}'...",
+                          f"Games with title '{title}'",
+                          "SEARCH BY TITLE",
+                          f"SELECT * FROM videogame WHERE title LIKE '%{title}%'")
 
     def lookup_by_developer(self, developer):
-        pass
+        self.select_query(f"Listing games with developer studio name '{developer}'...",
+                    f"Games with developer studio name '{developer}'",
+                    "SEARCH BY DEV",
+                    f"SELECT * FROM videogame WHERE developer LIKE '%{developer}%'")
 
     def lookup_by_publisher(self, publisher):
-        pass
+        self.select_query(f"Listing games with publisher name '{publisher}'...",
+                    f"Games with publisher name '{publisher}'",
+                    "SEARCH BY PUB",
+                    f"SELECT * FROM videogame WHERE publisher LIKE '%{publisher}%'")
+
+    def select_query(self, action_message, count_message, result_header, query):
+        rows = self.db.execute(query).fetchall()
+        count = len(rows)
+        print(f"\n{action_message}")
+        print(f"{count_message}: {count}")
+        print(f"========{result_header}===========\n")
+        for record in rows:
+            print(f"ID: {record[0]}");
+            print(f"Game Title: {record[1]}");
+            print(f"Year of Release: {record[2]}");
+            print(f"Developer: {record[3]}");
+            print(f"Publisher: {record[4]}");
+            print(f"Genre: {record[5]}"); print()
+        print(f"========END {result_header}=======\n")
 
 @click.command()
 @click.option('-l', '--list', is_flag=True, help="List all the games currently in the database.")
