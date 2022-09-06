@@ -17,14 +17,24 @@ int main(int argc, char** argv) {
     bool list_records { false };
     app.add_flag("--list,-l", list_records, "List all videogames currently in the database.");
     bool write_new_record { false };
-    app.add_flag("--write,-w", write_new_record, "Write a new record into the database.");
+    app.add_flag("--write,-w", write_new_record, "Write a new record into the database.")
+        ->excludes("-l");
 
     std::string lookup_by_title {};
-    app.add_option("--title,-t", lookup_by_title, "Lookup games in the database by their title.");
+    app.add_option("--title,-t", lookup_by_title, "Lookup games in the database by their title.")
+        ->excludes("-w")
+        ->excludes("-l");
     std::string lookup_by_developer {};
-    app.add_option("--developer,-d", lookup_by_developer, "Lookup games in the database by their developer studio name.");
+    app.add_option("--developer,-d", lookup_by_developer, "Lookup games in the database by their developer studio name.")
+        ->excludes("-t")
+        ->excludes("-w")
+        ->excludes("-l");
     std::string lookup_by_publisher {};
-    app.add_option("--publisher,-p", lookup_by_publisher, "Lookup games in the database by their publisher name.");
+    app.add_option("--publisher,-p", lookup_by_publisher, "Lookup games in the database by their publisher name.")
+        ->excludes("-d")
+        ->excludes("-t")
+        ->excludes("-w")
+        ->excludes("-l");
 
     CLI11_PARSE(app, argc, argv);
 
@@ -33,6 +43,6 @@ int main(int argc, char** argv) {
     std::cout << "lookup_by_title: " << print(lookup_by_title) << ";" << std::endl;
     std::cout << "lookup_by_developer: " << print(lookup_by_developer) << ";" << std::endl;
     std::cout << "lookup_by_publisher: " << print(lookup_by_publisher) << "." << std::endl;
-    
+
     return 0;
 }
