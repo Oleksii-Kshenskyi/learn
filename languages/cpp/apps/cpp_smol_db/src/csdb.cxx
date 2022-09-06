@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "lib.hxx"
+#include "database.hxx"
 #include <CLI/CLI.hpp>
 
 std::string print(bool flag) {
@@ -38,11 +39,16 @@ int main(int argc, char** argv) {
 
     CLI11_PARSE(app, argc, argv);
 
-    std::cout << "List: " << print(list_records) << ";" << std::endl;
-    std::cout << "Write: " << print(write_new_record) << ";" << std::endl;
-    std::cout << "lookup_by_title: " << print(lookup_by_title) << ";" << std::endl;
-    std::cout << "lookup_by_developer: " << print(lookup_by_developer) << ";" << std::endl;
-    std::cout << "lookup_by_publisher: " << print(lookup_by_publisher) << "." << std::endl;
+    Database db;
+    if(list_records) db.list_records();
+    else if(write_new_record) db.write_new_record();
+    else if(!lookup_by_title.empty()) db.lookup_by_title(lookup_by_title);
+    else if(!lookup_by_developer.empty()) db.lookup_by_developer(lookup_by_developer);
+    else if(!lookup_by_publisher.empty()) db.lookup_by_publisher(lookup_by_publisher);
+    else {
+        std::cout << "ERROR: it's required to specify exactly one of the five parameters so the program has something to do." << std::endl;
+        std::exit(-1);
+    }
 
     return 0;
 }
