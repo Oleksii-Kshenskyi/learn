@@ -47,8 +47,7 @@ int main(int argc, char** argv) {
         else if (!lookup_by_title.empty()) db.lookup_by_title(lookup_by_title);
         else if (!lookup_by_developer.empty()) db.lookup_by_developer(lookup_by_developer);
         else if (!lookup_by_publisher.empty()) db.lookup_by_publisher(lookup_by_publisher);
-        else
-        {
+        else {
             std::cout << "ERROR: it's required to specify exactly one of the five parameters so the program has something to do." << std::endl;
             std::exit(-1);
         }
