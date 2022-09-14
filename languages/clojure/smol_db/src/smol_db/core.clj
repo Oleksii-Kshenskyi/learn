@@ -18,7 +18,7 @@
 (defn validate-arg [args long short]
   (or (= (nth args 0) long) (= (nth args 0) short)))
 (defn validate-flag [args long short]
-  (and (validate-arg args long short) (= count args) 1))
+  (and (validate-arg args long short) (= (count args) 1)))
 (defn validate-arg-with-value [args long short]
   (and (validate-arg args long short) (= (count args) 2)))
 (defn parse-args-and-run [args]
@@ -32,10 +32,11 @@
     (println (str "ERROR: unknown command or misused option!\n" (usage)))))
 
 (defn -main [& args]
-  (System/setProperty "file.encoding" "UTF-8") 
+  (System/setProperty "file.encoding" "UTF-8")
+  (let [the_db (db/init-db)]
   (cond
     (= (count args) 0) (println (str "ERROR: the app expects exactly one flag to determine what to do.\n" (usage)))
     (> (count args) 2) (println (str "ERROR: too many arguments. Choose exactly one from the list available.\n" (usage)))
-    :else (parse-args-and-run args))
+    :else (parse-args-and-run args)))
   0)
 
