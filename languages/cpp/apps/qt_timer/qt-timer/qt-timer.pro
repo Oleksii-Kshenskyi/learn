@@ -1,6 +1,11 @@
-QT += quick
+QT += quick core
+
+CONFIG += qmltypes
+QML_IMPORT_NAME = io.qt.qttimerex.backend
+QML_IMPORT_MAJOR_VERSION = 1
 
 SOURCES += \
+        backend.cpp \
         main.cpp
 
 resources.files = main.qml 
@@ -17,3 +22,6 @@ QML_DESIGNER_IMPORT_PATH =
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+HEADERS += \
+    backend.h
