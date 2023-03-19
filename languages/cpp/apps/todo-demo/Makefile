@@ -2,7 +2,7 @@ c: ./build/
 	rm -rf build
 cm: ./CMakeLists.txt
 	mkdir -p build && cd build && cmake .. -G "Unix Makefiles"
-b: ./build/
+b: cm
 	cd build && make -j16
-r: build/todo
+r: b
 	build/todo
