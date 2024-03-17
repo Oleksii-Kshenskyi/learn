@@ -40,3 +40,5 @@ build-*/
 *.pro.user
 
 *.exe
+
+Cargo.lock
