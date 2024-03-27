@@ -42,3 +42,10 @@ build-*/
 *.exe
 
 Cargo.lock
+
+bin/
+obj/
+*.obj
+
+.vs/
+.vscode/
