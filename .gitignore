@@ -49,3 +49,15 @@ obj/
 
 .vs/
 .vscode/
+
+*.tlog
+*.ilk
+*.pdb
+*.idb
+*.ipdb
+*.recipe
+*.filters
+*.vcxproj.user
+
+Debug/
+Release/
